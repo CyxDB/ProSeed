@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 import requests
 import json
 
+def get_eventid_from_slug(slug_string):
+    
+    return None
+
 def getDataFromEventID(e_id):
     """
     queries start.gg API using an event ID
