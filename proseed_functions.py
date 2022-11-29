@@ -14,6 +14,49 @@ def get_eventid_from_slug(slug_string):
     
     return None
 
+
+
+def get_pIDs_and_pnames_from_eID(eID, bearer_token):
+    """
+    queries start.gg API using an event ID to return
+    an array of player IDs and an array of the 
+    corresponding player names
+    """
+    pID_array = np.array([])
+    pname_array = np.array([])
+
+    query = """query get_pnames_from_eid($e_id : ID!) {
+        event(id : $e_id) {
+        entrants{
+        nodes{
+            participants{
+                player{
+                    gamerTag,
+                    id
+            }
+            }
+        }
+        }
+    }
+    }"""
+
+    variables = { "e_id" : eID}
+    url = 'https://api.start.gg/gql/alpha'
+    headers = {'Authorization': f'Bearer {bearer_token}', 'Content-Type': 'application/json'}
+
+    r = requests.post(url, headers=headers, json={'query': query, 'variables' : variables})
+    assert r.status_code == 200, "status code should be 200"
+
+    json_data = json.loads(r.text)  
+
+    entrants_list = json_data["data"]["event"]["entrants"]["nodes"]
+
+    pID_array = np.array([entrant["participants"][0]["player"]["gamerTag"] for entrant in entrants_list], dtype=str)
+    pname_array = np.array([entrant["participants"][0]["player"]["id"] for entrant in entrants_list], dtype=int)
+
+    # return entrants_list
+    return pID_array, pname_array
+
 def getDataFromEventID(e_id):
     """
     queries start.gg API using an event ID
@@ -54,6 +97,7 @@ def getDataFromEventID(e_id):
         }
         }
     """
+
 
     variables = { "e_id" : e_id}
     url = 'https://api.start.gg/gql/alpha'
