@@ -13,7 +13,7 @@ class MainApplication(tk.Frame):
         
         self.scoreframe = scorewindow.Main(self)
         
-        self.scoreframe.pack(side="right", fill="both", expand=True)
+        self.scoreframe.pack(side='top', expand=True)
         
 def show_prefs():
     config = ConfigParser()
@@ -57,13 +57,12 @@ if __name__ == "__main__":
     
     root.title('ProSeed')
     root.config(menu=menubar)
-    root.geometry('500x250')
     
     #Create a settings.ini file with default blank values
     if not (os.path.exists('./settings.ini')):
        #print("writing init configs")
        configwriter.init_configs()
 
-    MainApplication(root).pack(side="top", fill="both", expand=True)
+    MainApplication(root).pack(side='top', fill="both", expand=True)
     
     root.mainloop()
