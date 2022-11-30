@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-class Main(tk.Frame):
+class Scoreframe(tk.Frame):
 
     choices = ['Extav', 'Cyxie'] #array of player names to select from Comboboxes. This should be blank normally.
     
