@@ -29,12 +29,7 @@ def show_prefs():
     top = tk.Toplevel()
     tk.Label(top, text='Api Key').pack()
     tk.Entry(top, textvariable=api_key).pack()
-    tk.Button(top, text='Apply', command=write_prefs(user_prefs)).pack()
-    
-def write_prefs(user_prefs):
-    print('write prefs------------------------')
-    for k in user_prefs:
-        print(k + ':' + user_prefs[k])
+    tk.Button(top, text='Apply').pack()
         
 class Menubar(tk.Menu):
     def __init__(self, parent,*args, **kwargs):

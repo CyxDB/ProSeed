@@ -27,25 +27,41 @@ class Main(tk.Frame):
         
         # Top Row
         # Player 1
-        tk.Label(self, text='Player 1').grid(row=0, column=0, sticky='w')
-        self.lb1 = ttk.Combobox(self, values=self.choices, textvariable=self.p1_name)
-        self.lb1.grid(row=1, column=0, padx=5, pady=5)
-        tk.Spinbox(self, textvariable=self.p1_score, width=3, from_=-99, to=99, justify='center').grid(row=1, column=1, padx=5)
+        
+        #tk.Label(self, text='Player 1').grid(row=0, column=0, sticky='w')
+        self.p1_frame = tk.LabelFrame(self, text='Player 1', labelanchor='nw')
+        self.p1_frame.grid(row=1, column=0, columnspan=2)
+        self.lb1 = ttk.Combobox(self.p1_frame, values=self.choices, textvariable=self.p1_name)
+        self.lb1.pack(padx=5, pady=5, side='left')
+        self.p1_spinbox = tk.Spinbox(self.p1_frame, textvariable=self.p1_score, width=3, from_=-99, to=99, justify='center')
+        self.p1_spinbox.pack(padx=5, side='left')
+        
         
         # Switch Players
-        tk.Button(self, text='<->', command=self.switch_players).grid(row=1, column=2, ipadx=5)
+        self.swap_button = tk.Button(self, text='<->', command=self.switch_players)
+        self.swap_button.grid(row=1, column=2, ipadx=5)
+        
         
         # Player 2
-        tk.Spinbox(self, textvariable=self.p2_score, width=3, from_=-99, to=99, justify='center').grid(row=1, column=3, padx=5)
-        self.lb2 = ttk.Combobox(self, values=self.choices, textvariable=self.p2_name)
-        self.lb2.grid(row=1, column=4, padx=5, pady=5)
+        self.p2_frame = tk.LabelFrame(self, text='Player 2', labelanchor='ne')
+        self.p2_frame.grid(row=1, column=3, columnspan=2)
         
-        # Entry box for the current tournament phase. (Winners R1, Losers R2, Winners-Final...)
-        tk.Entry(self, textvariable=self.phase).grid(row=2, column=0, padx=5, pady=5)
+        self.p2_spinbox = tk.Spinbox(self.p2_frame, textvariable=self.p2_score, width=3, from_=-99, to=99, justify='center')
+        self.p2_spinbox.pack(padx=5, side='left')
+        
+        self.lb2 = ttk.Combobox(self.p2_frame, values=self.choices, textvariable=self.p2_name)
+        self.lb2.pack(padx=5, pady=5, side='right')
+        
         
         #Bottom Row
+        #Entry box for the current tournament phase. (Winners R1, Losers R2, Winners-Final...)
+        self.phase_frame = tk.LabelFrame(self, text='Phase/Round', labelanchor='w')
+        self.phase_frame.grid(row=2, column=0, padx=5, pady=5)
+        self.entry_phase = tk.Entry(self.phase_frame, textvariable=self.phase)
+        self.entry_phase.pack()
+        
         self.btn_update = tk.Button(self, text='Update Files', command=self.update_files)
-        self.btn_update.grid(row=2, column=1, columnspan=3, padx=5, pady=5)
+        self.btn_update.grid(row=2, column=2, padx=5, pady=5)
         
     
     def switch_players(self):
