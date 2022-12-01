@@ -17,6 +17,14 @@ def init_configs():
         'Content-Type': 'application/json'
     }
 
+    config['BAN20'] = {
+        'api_key' : '9d5bfb54910992d8e3795039f1669237',
+        'owner_id' : 1525697,
+        'event_id' : 817470,
+        'cheat_df_filepath' : 'cheat_df.csv',
+        'file_loc' : './',
+    }
+
     with open('./settings.ini', 'w') as f:
         config.write(f)
         

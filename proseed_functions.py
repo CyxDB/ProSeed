@@ -66,7 +66,10 @@ def get_pIDs_and_pnames_from_eID(eID, bearer_token):
 
     query = """query get_pnames_from_eid($e_id : ID!) {
         event(id : $e_id) {
-        entrants{
+        entrants (query : {
+          page : 1,
+          perPage : 500
+        }) {
         nodes{
             participants{
                 player{
