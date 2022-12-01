@@ -14,7 +14,46 @@ def get_eventid_from_slug(slug_string):
     
     return None
 
+def getEventIDsFromOwner(o_id):
 
+    query = """query getEventIDsFromOwner($ownerID : ID!) {
+      tournaments(query: {
+        page: 1,
+        perPage: 500,
+        filter: {
+          ownerId: $ownerID
+        }
+      }) {
+        nodes {
+          name
+          id
+          events{
+            id
+          }
+        }
+      }
+    }
+    """
+
+    variables = { "ownerID" : o_id}
+    url = 'https://api.start.gg/gql/alpha'
+    headers = {'Authorization': 'Bearer 9d5bfb54910992d8e3795039f1669237', 'Content-Type': 'application/json'}
+    
+    r = requests.post(url, headers=headers, json={'query': query, 'variables' : variables})
+    assert r.status_code == 200, "status code should be 200"
+
+    json_data = json.loads(r.text)
+    tourney_list = json_data['data']['tournaments']['nodes']
+
+    t_names = np.array([tourney['name'] for tourney in tourney_list if tourney['events']], dtype=str)
+    e_ids = np.array([tourney['events'][0]['id'] for tourney in tourney_list if tourney['events']], dtype=int)
+
+    colnames = ['t_name', 'e_id']
+    dfdata = np.array([t_names, e_ids])
+    dfdata = np.transpose(dfdata)
+    new_df = pd.DataFrame(dfdata, columns=colnames)
+
+    return new_df
 
 def get_pIDs_and_pnames_from_eID(eID, bearer_token):
     """
