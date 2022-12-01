@@ -11,7 +11,7 @@ class MainApplication(tk.Frame):
         
         self.config = ConfigParser()
         
-        self.scoreframe = scorewindow.Main(self)
+        self.scoreframe = scorewindow.Scoreframe(self)
         
         self.scoreframe.pack(side='top', expand=True)
         
