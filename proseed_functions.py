@@ -12,7 +12,7 @@ import json
 import glob
 import os
 from matplotlib.patches import Rectangle
-from matplotlib.patheffects import PathEffects
+from matplotlib import patheffects
 
 def get_eventid_from_slug(slug_string):
     
@@ -761,8 +761,6 @@ def make_onscreen_placement_graphic(df, p_id, savename):
     toptext = "Highest BAN Placement"
     placement = np.min(standings[standings>-1])
 
-    import matplotlib.patheffects as PathEffects
-
     kwargs = {
         'color' : 'black',
         'ha' : 'center',
@@ -775,7 +773,7 @@ def make_onscreen_placement_graphic(df, p_id, savename):
     # tt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
 
     tt = ax1.text(0.5, 0.7, placement, **kwargs)
-    tt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
+    tt.set_path_effects([patheffects.withStroke(linewidth=2, foreground='w')])
 
 
     ax1.add_patch(Rectangle((0,0), 1, 0.4, color='black', transform=ax1.transAxes))
@@ -848,8 +846,6 @@ def make_onscreen_tcount_graphic(df, p_id, savename):
     toptext = "BANs Entered"
     placement = len(standings[standings>0])
 
-    import matplotlib.patheffects as PathEffects
-
     kwargs = {
         'color' : 'black',
         'ha' : 'center',
@@ -862,7 +858,7 @@ def make_onscreen_tcount_graphic(df, p_id, savename):
     # tt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
 
     tt = ax1.text(0.5, 0.7, placement, **kwargs)
-    tt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
+    tt.set_path_effects([patheffects.withStroke(linewidth=2, foreground='w')])
 
 
     ax1.add_patch(Rectangle((0,0), 1, 0.4, color='black', transform=ax1.transAxes))
@@ -913,7 +909,7 @@ def make_onscreen_newplayer_graphic(savename):
     # tt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
 
     tt = ax1.text(0.5, 0.7, placement, **kwargs)
-    tt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
+    tt.set_path_effects([patheffects.withStroke(linewidth=2, foreground='w')])
 
 
     ax1.add_patch(Rectangle((0,0), 1, 0.4, color='black', transform=ax1.transAxes))
