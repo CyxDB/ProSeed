@@ -976,13 +976,13 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
         best_placement = "Wait and see..."
         filename = fr"{file_location}\statspage\player{playernum}bestplacement.txt"
         f = open(filename, "w")
-        f.write(fr'')
+        f.write(fr'Best Placement : {best_placement}')
         f.close()
 
         #update number of bans
         filename = fr"{file_location}\statspage\player{playernum}numberBANs.txt"
         f = open(filename, "w")
-        f.write(fr'')
+        f.write(fr'BANs Entered : First Time!')
         f.close()
 
         #update the graph
@@ -992,12 +992,6 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
         # print(file_location)
 
         #update the onscreen graphics
-        # filename = fr'{file_location}\statspage\onscreen_p{playernum}\newchallenger.png'
-        # make_onscreen_newplayer_graphic(filename)
-        filename = fr'{file_location}\statspage\onscreen_p{playernum}\3recentbargraph.png'
-        make_onscreen_newplayer_graphic(filename)
-        filename = fr'{file_location}\statspage\onscreen_p{playernum}\2topplacement.png'
-        make_onscreen_newplayer_graphic(filename)
-        filename = fr'{file_location}\statspage\onscreen_p{playernum}\1bansentered.png'
+        filename = fr'{file_location}\statspage\onscreen_p{playernum}\newchallenger.png'
         make_onscreen_newplayer_graphic(filename)
 
