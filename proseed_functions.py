@@ -932,25 +932,25 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
     """
 
     ban_count = get_player_number_bans(df, p_id)
-    deletionlist1 = glob.glob(file_location + fr'statspage/*.txt')
-    deletionlist2 = glob.glob(file_location + fr'statspage/slideshow_p{playernum}/*.png')
-    deletionlist3 = glob.glob(file_location + fr'statspage/onscreen_p{playernum}/*.png')
-    files_to_delete = deletionlist1 + deletionlist2 + deletionlist3
-    for file in files_to_delete:
-        os.remove(file)
+    # deletionlist1 = glob.glob(file_location + fr'statspage/*.txt')
+    # deletionlist2 = glob.glob(file_location + fr'statspage/slideshow_p{playernum}/*.png')
+    # deletionlist3 = glob.glob(file_location + fr'statspage/onscreen_p{playernum}/*.png')
+    # files_to_delete = deletionlist1 + deletionlist2 + deletionlist3
+    # for file in files_to_delete:
+    #     os.remove(file)
     
     
     if ban_count > 0:
 
         # update best tourney placement
         best_placement = get_player_highest_placement(df, p_id)
-        filename = fr"{file_location}/statspage/player{playernum}bestplacement.txt"
+        filename = fr"{file_location}statspage/player{playernum}bestplacement.txt"
         f = open(filename, "w")
         f.write(fr'Best Placement : {best_placement}')
         f.close()
 
         #update number of bans
-        filename = fr"{file_location}/statspage/player{playernum}numberBANs.txt"
+        filename = fr"{file_location}statspage/player{playernum}numberBANs.txt"
         f = open(filename, "w")
         f.write(fr'BANs Entered : {ban_count}')
         f.close()
@@ -973,15 +973,15 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
     else:
         # update best tourney placement
         best_placement = "Wait and see..."
-        filename = fr"{file_location}/player{playernum}bestplacement.txt"
+        filename = fr"{file_location}statspage/player{playernum}bestplacement.txt"
         f = open(filename, "w")
-        f.write(fr'Best Placement : {best_placement}')
+        f.write(fr' ')
         f.close()
 
         #update number of bans
         filename = fr"{file_location}statspage/player{playernum}numberBANs.txt"
         f = open(filename, "w")
-        f.write(fr'BANs Entered : First Time!')
+        f.write(fr' ')
         f.close()
 
         #update the graph
@@ -991,6 +991,10 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
         # print(file_location)
 
         #update the onscreen graphics
-        filename = fr'{file_location}statspage/onscreen_p{playernum}/newchallenger.png'
+        filename = fr'{file_location}statspage/onscreen_p{playernum}/3recentbargraph.png'
+        make_onscreen_newplayer_graphic(filename)
+        filename = fr'{file_location}statspage/onscreen_p{playernum}/2topplacement.png'
+        make_onscreen_newplayer_graphic(filename)
+        filename = fr'{file_location}statspage/onscreen_p{playernum}/1bansentered.png'
         make_onscreen_newplayer_graphic(filename)
 
