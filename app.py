@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import StringVar, ttk
 from configparser import ConfigParser
 import configwriter
+import os
 import os.path
 import scorewindow
 class MainApplication(tk.Frame):

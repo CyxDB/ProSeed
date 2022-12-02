@@ -229,7 +229,6 @@ def generate_alltime_graph_from_pID(p1_or_p2, pID, df_filepath="proseed_datafram
     fig = plt.figure(dpi=dpi)
     ax1 = plt.subplot(111)
     px, py = fig.get_size_inches() * dpi  #pixel calculations
-
     #~~~~~~~~~~~ format size of graph ~~~~~~~~~~~~~~~~#
     xmin = np.min(t_times) - np.ptp(t_times) / np.size(t_times)
     xmax = np.max(t_times) + np.ptp(t_times) / np.size(t_times)
@@ -933,9 +932,9 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
     """
 
     ban_count = get_player_number_bans(df, p_id)
-    deletionlist1 = glob.glob(file_location + fr'\statspage\*.txt')
-    deletionlist2 = glob.glob(file_location + fr'\statspage\slideshow_p{playernum}\*.png')
-    deletionlist3 = glob.glob(file_location + fr'\statspage\onscreen_p{playernum}\*.png')
+    deletionlist1 = glob.glob(file_location + fr'statspage/*.txt')
+    deletionlist2 = glob.glob(file_location + fr'statspage/slideshow_p{playernum}/*.png')
+    deletionlist3 = glob.glob(file_location + fr'statspage/onscreen_p{playernum}/*.png')
     files_to_delete = deletionlist1 + deletionlist2 + deletionlist3
     for file in files_to_delete:
         os.remove(file)
@@ -957,41 +956,41 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
         f.close()
 
         #update the graph
-        filename = fr'{file_location}\statspage\slideshow_p{playernum}\recentbargraph.png'
+        filename = fr'{file_location}statspage/slideshow_p{playernum}/recentbargraph.png'
         # print(file_location)
         make_recent_tourney_bar_graph(df, p_id, filename)
         # print(file_location)
 
         # update the onscreen graphics
-        filename = fr'{file_location}\statspage\onscreen_p{playernum}\3recentbargraph.png'
+        filename = fr'{file_location}statspage/onscreen_p{playernum}/3recentbargraph.png'
         make_onscreen_bar_graphic(df, p_id, filename)
-        filename = fr'{file_location}\statspage\onscreen_p{playernum}\2topplacement.png'
+        filename = fr'{file_location}statspage/onscreen_p{playernum}/2topplacement.png'
         make_onscreen_placement_graphic(df, p_id, filename)
-        filename = fr'{file_location}\statspage\onscreen_p{playernum}\1bansentered.png'
+        filename = fr'{file_location}statspage/onscreen_p{playernum}/1bansentered.png'
         make_onscreen_tcount_graphic(df, p_id, filename)
 
     
     else:
         # update best tourney placement
         best_placement = "Wait and see..."
-        filename = fr"{file_location}\statspage\player{playernum}bestplacement.txt"
+        filename = fr"{file_location}/player{playernum}bestplacement.txt"
         f = open(filename, "w")
         f.write(fr'Best Placement : {best_placement}')
         f.close()
 
         #update number of bans
-        filename = fr"{file_location}\statspage\player{playernum}numberBANs.txt"
+        filename = fr"{file_location}statspage/player{playernum}numberBANs.txt"
         f = open(filename, "w")
         f.write(fr'BANs Entered : First Time!')
         f.close()
 
         #update the graph
-        filename = fr'{file_location}\statspage\slideshow_p{playernum}\recentbargraph.png'
+        filename = fr'{file_location}statspage/slideshow_p{playernum}/recentbargraph.png'
         # print(file_location)
         make_first_timer_statspage_graphic(filename)
         # print(file_location)
 
         #update the onscreen graphics
-        filename = fr'{file_location}\statspage\onscreen_p{playernum}\newchallenger.png'
+        filename = fr'{file_location}statspage/onscreen_p{playernum}/newchallenger.png'
         make_onscreen_newplayer_graphic(filename)
 
