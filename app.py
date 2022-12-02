@@ -72,5 +72,5 @@ if __name__ == "__main__":
     MainApplication(root).pack(side='top', fill="both", expand=True)
     
     root.mainloop()
-    # THIS IS Cyxies COMMENT
-    # This is extav's comment
+    # EXTAVS COMMENTS WILL REIGN SUPREME
+    # I cannot be defeated
