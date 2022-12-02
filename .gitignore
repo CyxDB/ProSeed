@@ -169,7 +169,7 @@ phase.txt
 *.ini
 app_testing.ipynb
 extav_experiments/BAN background.jpeg
-statspage
+statspage/
 cheat_df.csv
 extav_experiments/Stats Screen Illustrator.ai
 tourney_configuration_notebook.ipynb

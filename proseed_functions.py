@@ -11,6 +11,8 @@ import requests
 import json
 import glob
 import os
+from matplotlib.patches import Rectangle
+from matplotlib.patheffects import PathEffects
 
 def get_eventid_from_slug(slug_string):
     
@@ -206,7 +208,7 @@ def generate_alltime_graph_from_pID(p1_or_p2, pID, df_filepath="proseed_datafram
     all_tourney_times = np.unique(df['t_starttime'].values)
 
     standings = np.array([], dtype=int)
-    t_times = np.array([], dtype=int)
+    t_times = np.array([], dtype=float)
     entrant_counts = np.array([], dtype=int)
 
     for tourney_time in all_tourney_times:
@@ -947,13 +949,13 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
 
         # update best tourney placement
         best_placement = get_player_highest_placement(df, p_id)
-        filename = fr"{file_location}\statspage\player{playernum}bestplacement.txt"
+        filename = fr"{file_location}/statspage/player{playernum}bestplacement.txt"
         f = open(filename, "w")
         f.write(fr'Best Placement : {best_placement}')
         f.close()
 
         #update number of bans
-        filename = fr"{file_location}\statspage\player{playernum}numberBANs.txt"
+        filename = fr"{file_location}/statspage/player{playernum}numberBANs.txt"
         f = open(filename, "w")
         f.write(fr'BANs Entered : {ban_count}')
         f.close()

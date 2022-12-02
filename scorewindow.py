@@ -136,5 +136,5 @@ class Scoreframe(tk.Frame):
                 f.close()
         except:
             Exception ('File I/O Error: Error while attempting to write .txt files')
-        update_graphic_and_statpage_data(self.dF, self.p1_id, self.file_location, playernum=1)
-        update_graphic_and_statpage_data(self.dF, self.p2_id, self.file_location, playernum=2)
+        psf.update_graphic_and_statpage_data(self.dF, self.p1_id, self.file_location, playernum=1)
+        psf.update_graphic_and_statpage_data(self.dF, self.p2_id, self.file_location, playernum=2)
