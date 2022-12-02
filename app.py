@@ -58,7 +58,18 @@ if __name__ == "__main__":
     if not (os.path.exists('./settings.ini')):
        #print("writing init configs")
        configwriter.init_configs()
+    
+    dir_array = ['./statspage/onscreen_p1/',
+                 './statspage/onscreen_p2/',
+                 './statspage/slideshow_p1/',
+                 './statspage/slideshow_p2/',
+                 './statspage/newplayer1/',
+                 './statspage/newplayer2/']
+    for path in dir_array:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+
 
     MainApplication(root).pack(side='top', fill="both", expand=True)
     
     root.mainloop()
+    # THIS IS Cyxies COMMENT
