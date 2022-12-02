@@ -10,6 +10,7 @@ class MainApplication(tk.Frame):
         self.parent = parent
         
         self.config = ConfigParser()
+        self.config.read('./settings.ini')
         
         self.scoreframe = scorewindow.Scoreframe(self)
         
@@ -18,7 +19,7 @@ class MainApplication(tk.Frame):
 def show_prefs():
     config = ConfigParser()
     config.read('./settings.ini')
-    user_prefs = config['User']
+    user_prefs = config['BAN20']      # NOTE for 1st release
     api_key = tk.StringVar()
     api_key.set(user_prefs['api_key'])
     
