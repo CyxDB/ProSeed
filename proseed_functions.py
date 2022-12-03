@@ -232,7 +232,7 @@ def generate_alltime_graph_from_pID(p1_or_p2, pID, df_filepath="proseed_datafram
     #~~~~~~~~~~~ format size of graph ~~~~~~~~~~~~~~~~#
     xmin = np.min(t_times) - np.ptp(t_times) / np.size(t_times)
     xmax = np.max(t_times) + np.ptp(t_times) / np.size(t_times)
-    ax1.set_xlim([xmin, xmax])
+    ax1.set_xlim(xmin, xmax)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
     #~~~~~~~~~~~~ time/bar calculations ~~~~~~~~~~~~~~#
     week_in_seconds = 60 * 60 * 24 * 7
@@ -381,7 +381,7 @@ def make_recent_tourney_bar_graph(df, p_id, savename):
     ########### format size of graph #################
     xmin = np.min(t_times) - np.ptp(t_times) / np.size(t_times)
     xmax = np.max(t_times) + np.ptp(t_times) / np.size(t_times)
-    ax1.set_xlim([xmin, xmax])
+    ax1.set_xlim(xmin, xmax)
     ##################################################
 
     barwidth = 0.5
@@ -497,6 +497,193 @@ def make_recent_tourney_bar_graph(df, p_id, savename):
     # plt.show()
     return None
 
+def make_alternate_statscreen_graph(df, p_id, savename):
+    """
+    DECEPTIVE NAME - Makes the graph for the statscreen,
+    aka a fullsize graph with lots of detail meant to
+    take up a significant portion of the screen
+
+    Sort of a hot mess, and inefficient. Should be
+    remade sometime (12/2/2022)
+    """
+    standings = df[df['p_id'] == p_id]['p_standing'].values.astype(int)
+    t_names = df[df['p_id'] == p_id]['t_name'].values.astype(str)
+    t_times = df[df['p_id'] == p_id]['t_starttime'].values.astype(int)
+    # t_times = np.arange(len(t_times))
+    entrant_counts = df[df['p_id'] == p_id]['entrant_count'].values.astype(int)
+
+    ############## fill arrays for tourneys attended, tourneys not attended, etc #########
+    ######################################################################################
+    # region
+    all_tourney_times = np.unique(df['t_starttime'].values)
+
+    standings = np.array([], dtype=int)
+    t_times = np.array([], dtype=int)
+    entrant_counts = np.array([], dtype=int)
+
+    for tourney_time in all_tourney_times:
+        # is_right_tourney = df['t_starttime'] == tourney_time
+        # has_player = df['p_id'] == p_id
+        relevant_df = df[df['t_starttime'] == tourney_time]
+        assert np.size(np.unique(relevant_df['entrant_count'].values)) == 1, 'same tourney diff entrant counts'
+        entrant_count = relevant_df['entrant_count'].values[0]
+        if len(relevant_df[relevant_df['p_id'] == p_id]) > 0:
+            standing = relevant_df[relevant_df['p_id'] == p_id]['p_standing'].values[0]
+        else:
+            standing = -1
+
+        standings = np.append(standings, standing)
+        t_times = np.append(t_times, tourney_time)
+        entrant_counts = np.append(entrant_counts, entrant_count)
+    # endregion
+    ######################################################################################
+
+    # ##OPTIONAL MODIFICATION FOR ONLY LAST 10##
+    # standings = standings[-10:]
+    # t_times = t_times[-10:]
+    # entrant_counts = entrant_counts[-10:]
+
+    ########MODIFICATION FOR NORMALIZED TIMES#########
+    t_times = np.arange(len(t_times))
+
+    ##############
+    # test plot
+    ##############
+
+    dpi = 100
+    # fig = plt.figure(dpi=dpi, figsize=(3,1))
+    fig = plt.figure(dpi=dpi, figsize=(9,3))
+    ax1 = plt.subplot(111)
+    plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0, 
+                hspace = 0, wspace = 0)
+    plt.margins(0,0)
+    px, py = fig.get_size_inches() * dpi
+    ax1.axis('off')
+
+    ########### format size of graph #################
+    xmin = np.min(t_times) - np.ptp(t_times) / np.size(t_times)
+    xmax = np.max(t_times) + np.ptp(t_times) / np.size(t_times)
+    ax1.set_xlim(xmin, xmax)
+    ##################################################
+
+    barwidth = 0.8
+    # barwidth = 5*24*3600
+
+    ############# plot the bar for tourneys entered ###########
+    # region
+    truth_array = standings > 0
+    xvals = t_times[truth_array][::-1]
+    # print(xvals)
+    # yvals = np.zeros(len(entrant_counts[truth_array][::-1])) + 1  #change for normalized
+    yvals = entrant_counts[truth_array][::-1]
+
+
+
+    bar_formatting = {
+        'width' : barwidth,
+        # 'color' : '#fcd720',
+        'color' : 'black',
+        'alpha' : 1,
+        'joinstyle' : 'round'
+    }
+    ax1.bar(xvals, yvals, **bar_formatting)
+
+    # endregion
+    #########################################################
+
+    ############# plot the bar for tourneys NOT entered ###########
+    # region
+    truth_array = ~(standings > 0)
+    xvals = t_times[truth_array][::-1]
+    # yvals = np.zeros(len(entrant_counts[truth_array][::-1]))+1 # change for normalized
+    yvals = entrant_counts[truth_array][::-1]
+
+    bar_formatting = {
+        'width' : barwidth,
+        'color' : 'black',
+        'alpha' : 0.8
+    }
+    ax1.bar(xvals, yvals, **bar_formatting)
+
+    # endregion
+    #########################################################
+
+    ############# plot the placements #############
+    # region
+    ## ms math ##
+    barwidth_perc_of_img = barwidth / np.ptp([xmin, xmax]) 
+    barwidth_in_pix = barwidth_perc_of_img * px
+    markersize = barwidth_in_pix / 2
+    #############
+    truth_array = (standings > 0)
+    xvals = t_times[truth_array][::-1]
+    yvals = entrant_counts[truth_array][::-1] - standings[truth_array][::-1]
+    # yvals = yvals / entrant_counts[truth_array][::-1]
+    plot_formatting = {
+        'linestyle' : '-',
+        'linewidth' : markersize / 7,
+        'marker' : 'o',
+        'ms' : markersize*1.2, ####REMOVE THE /2
+        'color' : '#cd0024'  # BAN red
+    }
+
+    ax1.plot(xvals, yvals, **plot_formatting)
+    # endregion
+    ###############################################
+
+
+    ############# plot the text ###################
+    # region
+    truth_array = (standings > 0)
+    for i,j,k in zip(xvals,standings[truth_array][::-1], yvals):
+        ax1.annotate(str(j),     xy =(i, k), color='white',
+                            fontsize=markersize, weight='heavy',
+                            horizontalalignment='center',
+                            verticalalignment='center_baseline')
+    # endregion
+
+    ############# plot the Title Bar ###################
+    # region
+    # ywidth = np.ptp(ax1.get_ylim())
+    # extra = ywidth*0.66
+    # ax1.set_ylim(bottom=0-extra)
+    # ax1.add_patch(Rectangle((0,0), 1, 0.4, color='black', transform=ax1.transAxes))
+    # titletext= "Alltime BAN Placements"
+    # kwargs = {
+    #     'color' : '#fcd720',
+    #     'ha' : 'center',
+    #     'va' : 'center',
+    #     'transform' : ax1.transAxes,
+    #     'fontweight' : 'heavy',
+    #     'fontsize' : py/12
+    # }
+    # ax1.text(0.5, 0.2, titletext, **kwargs)
+    # endregion
+    ####################################################
+
+    ############# Instead of Title Bar, Format Axes ###################
+    # region
+    fs = 20
+    ax1.axis('on')
+    ax1.set_ylabel('Entrant Count', fontsize=fs)
+    # ax1.set_xlabel('Past Tournaments', fontsize=fs)
+    ax1.set_xticks([])
+    # ax1.set_yticks([16,32,48,64])
+    # ax1.set_ylim(0,70)
+    ax1.set_title('Previous Placements', fontsize=1.5*fs, fontweight='heavy')
+    # endregion
+    ###################################################################
+
+
+    # ywidth = yw
+    # yw + x*yw = 
+    # plt.title("Ban Result")
+    plt.savefig(savename, bbox_inches='tight', transparent=True)
+    plt.close()
+    # plt.show()
+    return None
+
+
 def make_first_timer_statspage_graphic(savename):
     """
     Makes a larger graphic suited for a statspage for
@@ -595,7 +782,7 @@ def make_onscreen_bar_graphic(df, p_id, savename):
     ########### format size of graph #################
     xmin = np.min(t_times) - np.ptp(t_times) / np.size(t_times)
     xmax = np.max(t_times) + np.ptp(t_times) / np.size(t_times)
-    ax1.set_xlim([-1, len(t_times)])
+    ax1.set_xlim(-1, len(t_times))
     ##################################################
 
     barwidth = 0.5
@@ -856,8 +1043,8 @@ def make_onscreen_tcount_graphic(df, p_id, savename):
     # tt = ax1.text(0.5, 0.8, toptext, **kwargs)
     # tt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
 
-    tt = ax1.text(0.5, 0.7, placement, **kwargs)
-    tt.set_path_effects([patheffects.withStroke(linewidth=2, foreground='w')])
+    tt = ax1.text(0.5, 0.7, str(placement), **kwargs)
+    tt.set_path_effects([patheffects.withStroke(linewidth=2, foreground='w')])   
 
 
     ax1.add_patch(Rectangle((0,0), 1, 0.4, color='black', transform=ax1.transAxes))
@@ -958,7 +1145,8 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
         #update the graph
         filename = fr'{file_location}statspage/slideshow_p{playernum}/recentbargraph.png'
         # print(file_location)
-        make_recent_tourney_bar_graph(df, p_id, filename)
+        # make_recent_tourney_bar_graph(df, p_id, filename)
+        make_alternate_statscreen_graph(df, p_id, filename)
         # print(file_location)
 
         # update the onscreen graphics
@@ -997,4 +1185,6 @@ def update_graphic_and_statpage_data(df, p_id, file_location, playernum=1):
         make_onscreen_newplayer_graphic(filename)
         filename = fr'{file_location}statspage/onscreen_p{playernum}/1bansentered.png'
         make_onscreen_newplayer_graphic(filename)
+
+    return None
 
