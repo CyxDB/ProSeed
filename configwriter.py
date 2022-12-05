@@ -5,7 +5,7 @@ def init_configs():
     config['DEFAULT'] = {
         'api_key': '',
         'startggapi_url': 'https://api.start.gg/gql/alpha',
-        'output_dir': './',
+        'output_dir': './statspage/',
         'user_slug': '',
         'owner_id': ''
     }

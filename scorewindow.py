@@ -121,6 +121,7 @@ class Scoreframe(tk.Frame):
         
     def update_files(self):
         """Dumps the values of the variables to indiviual .txt files."""
+        output_dir = self.parent.config['BAN20']['output_dir']
         files = {
             'p1name.txt': self.p1_name.get(),
             'p2name.txt': self.p2_name.get(),
@@ -131,7 +132,7 @@ class Scoreframe(tk.Frame):
         
         try:
             for e in files:
-                f = open(e, 'w')
+                f = open(output_dir + e, 'w')
                 f.write(files[e])
                 f.close()
         except:
